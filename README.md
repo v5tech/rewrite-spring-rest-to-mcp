@@ -29,8 +29,7 @@ To successfully migrate your Spring Web REST API to MCP, your project should:
 
 - Use Spring Boot 3.2+ (3.2.0 or newer)
 - Use Spring Web MVC for REST controllers
-- Have Java 17+ as the target JDK
-- Use Maven or Gradle as build tool
+- Use Maven build tool
 
 The recipe adds Spring AI MCP dependencies (version 1.0.0-SNAPSHOT or newer) to your project automatically.
 
