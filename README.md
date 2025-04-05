@@ -152,6 +152,97 @@ ToolCallbackProvider toolCallbackProvider(UserController userController) {
 }
 ```
 
+## 🌟 Demonstration
+
+You can try out this conversion tool with a sample Spring Boot 3 REST API project that's ready for conversion.
+
+### Sample Project Setup
+
+1. Clone the sample project:
+   ```bash
+   git clone https://github.com/addozhang/spring-boot-3-rest-api-sample.git
+   cd spring-boot-3-rest-api-sample
+   ```
+
+2. Review the sample project structure:
+   - It's a standard Spring Boot 3 application with REST controllers
+   - Includes typical REST endpoints with various HTTP methods (GET, POST, PUT, DELETE)
+   - Contains proper JavaDoc comments that will be converted to MCP tool descriptions
+
+### Conversion Process
+
+1. First, run the Maven command to update the POM file with required dependencies:
+   ```bash
+   mvn org.openrewrite.maven:rewrite-maven-plugin:6.4.0:run \
+     -Drewrite.activeRecipes=RewriteWebToMCP \
+     -Drewrite.recipeArtifactCoordinates=com.atbug.rewrite:web-to-mcp:1.0-SNAPSHOT \
+     -Drewrite.exportDatatables=true
+   ```
+
+2. Then, run the same command again to perform the actual code conversion:
+   ```bash
+   mvn org.openrewrite.maven:rewrite-maven-plugin:6.4.0:run \
+     -Drewrite.activeRecipes=RewriteWebToMCP \
+     -Drewrite.recipeArtifactCoordinates=com.atbug.rewrite:web-to-mcp:1.0-SNAPSHOT \
+     -Drewrite.exportDatatables=true
+   ```
+
+3. Verify the changes:
+   - Check your controller classes for added `@Tool` and `@ToolParam` annotations
+   - Look for the new `ToolCallbackProvider` bean in your main application class
+   - Check that `application.properties` or `application.yml` has MCP server configuration
+
+4. Run the application:
+   ```bash
+   mvn spring-boot:run
+   ```
+
+5. Test your MCP server using the official MCP Inspector:
+   - Clone the MCP Inspector repository:
+     ```bash
+     git clone https://github.com/modelcontextprotocol/inspector.git
+     cd inspector
+     ```
+   - Install dependencies and start the inspector:
+     ```bash
+     npm install
+     npm run dev
+     ```
+   - Access the inspector in your browser at: http://localhost:5173/
+   - In the left side panel, configure your MCP server with:
+     - Type: SSE
+     - Address: http://localhost:8080/mcp/messages
+   - Once connected, you can:
+     - View all available tools in the main panel
+     - Test each tool interactively
+     - See the responses from your MCP server
+
+### What to Expect
+
+After conversion, your Spring Boot application will function both as a traditional REST API and as an MCP server. This means:
+
+- All your existing endpoints continue to work as before
+- Applications that support the MCP protocol can discover and interact with your API
+- AI assistants can understand how to use your tools through the MCP protocol's standardized format
+
+Applications consuming your MCP server can be configured to connect to it with configuration like:
+
+```json
+{
+  "mcpServers": {
+    "spring-ai-mcp-sample": {
+      "autoApprove": [],
+      "disabled": false,
+      "timeout": 60,
+      "url": "http://localhost:8080/mcp/messages",
+      "transportType": "sse"
+    }
+  }
+}
+```
+
+This allows client applications to seamlessly discover and utilize the tools provided by your converted API.
+
 ## 📄 License
 
 This project is licensed under the Apache License 2.0 - see the LICENSE file for details.
