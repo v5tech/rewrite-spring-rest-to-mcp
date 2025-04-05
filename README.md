@@ -20,7 +20,7 @@ For more details about Spring AI's implementation of MCP, see the [Spring AI MCP
 
 ### Prerequisites
 
-- Java 16 or higher
+- Java 17 or higher
 - Maven 3.6+
 
 ### Prerequisites for Target REST API Projects
