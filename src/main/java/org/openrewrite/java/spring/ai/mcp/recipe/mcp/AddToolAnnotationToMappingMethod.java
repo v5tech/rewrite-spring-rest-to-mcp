@@ -6,6 +6,7 @@ import org.openrewrite.java.JavaIsoVisitor;
 import org.openrewrite.java.JavaParser;
 import org.openrewrite.java.JavaTemplate;
 import org.openrewrite.java.search.FindAnnotations;
+import org.openrewrite.java.search.UsesType;
 import org.openrewrite.java.spring.ai.mcp.visitor.SpringAIMcpVisitor;
 import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.Javadoc;
@@ -55,12 +56,6 @@ public class AddToolAnnotationToMappingMethod extends ScanningRecipe<AtomicBoole
     @Override
     public @NotNull TreeVisitor<?, ExecutionContext> getVisitor(@NotNull AtomicBoolean aiMcpEnabled) {
         JavaIsoVisitor<ExecutionContext> visitor = new JavaIsoVisitor<>() {
-
-            @Override
-            public J.@NotNull ClassDeclaration visitClassDeclaration(J.@NotNull ClassDeclaration classDecl, @NotNull ExecutionContext ctx) {
-                //TODO: make sure the target class is a Spring Bean
-                return super.visitClassDeclaration(classDecl, ctx);
-            }
 
             @Override
             public J.@NotNull MethodDeclaration visitMethodDeclaration(J.@NotNull MethodDeclaration method, @NotNull ExecutionContext ctx) {
@@ -118,7 +113,17 @@ public class AddToolAnnotationToMappingMethod extends ScanningRecipe<AtomicBoole
                 return method;
             }
         };
-        return Preconditions.check(aiMcpEnabled.get(), visitor);
+
+        //make sure the target class is a Spring Bean
+        TreeVisitor<?, ExecutionContext> beanChecker = Preconditions.or(
+                new UsesType<>("org.springframework.stereotype.Controller", false),
+                new UsesType<>("org.springframework.stereotype.Component", false),
+                new UsesType<>("org.springframework.stereotype.Service", false),
+                new UsesType<>("org.springframework.stereotype.Repository", false),
+                new UsesType<>("org.springframework.web.bind.annotation.RestController", false)
+        );
+        return Preconditions.check(
+                aiMcpEnabled.get(), Preconditions.check(beanChecker, visitor));
     }
 
     @Override

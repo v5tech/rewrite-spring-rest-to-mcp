@@ -31,12 +31,35 @@ public class AddToolAnnotationToMappingMethodTest implements RewriteTest {
     }
 
     @Test
-    public void failDueToNoDependency() {
+    public void skipDueToNoDependency() {
         rewriteRun(
                 java(originHelloController)
         );
     }
 
+    @Test
+    public void skipDueToNotBean() {
+        ExecutionContext ctx = new InMemoryExecutionContext();
+        ExecutionContext context = MavenExecutionContextView.view(ctx).setMavenSettings(MavenSettings.readMavenSettingsFromDisk(ctx));
+
+        rewriteRun(
+                spec -> spec.executionContext(context),
+                pomXml(pom),
+                java("""
+                        package com.atbug.rewrite.test.controller;
+                        
+                        import org.springframework.web.bind.annotation.GetMapping;
+                        
+                        public class HelloController {
+                        
+                            @GetMapping("/hi")
+                            public String hello() {
+                                return "Hello, OpenRewrite";
+                            }
+                        }
+                        """)
+        );
+    }
 
     @Language("java")
     public static final String originHelloController = """
