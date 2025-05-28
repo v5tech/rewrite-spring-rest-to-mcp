@@ -174,7 +174,7 @@ You can try out this conversion tool with a sample Spring Boot 3 REST API projec
    ```bash
    mvn org.openrewrite.maven:rewrite-maven-plugin:6.4.0:run \
      -Drewrite.activeRecipes=RewriteWebToMCP \
-     -Drewrite.recipeArtifactCoordinates=com.atbug.rewrite:web-to-mcp:1.0-SNAPSHOT \
+     -Drewrite.recipeArtifactCoordinates=com.atbug.rewrite:spring-rest-to-mcp:1.0-SNAPSHOT \
      -Drewrite.exportDatatables=true
    ```
 
@@ -182,7 +182,7 @@ You can try out this conversion tool with a sample Spring Boot 3 REST API projec
    ```bash
    mvn org.openrewrite.maven:rewrite-maven-plugin:6.4.0:run \
      -Drewrite.activeRecipes=RewriteWebToMCP \
-     -Drewrite.recipeArtifactCoordinates=com.atbug.rewrite:web-to-mcp:1.0-SNAPSHOT \
+     -Drewrite.recipeArtifactCoordinates=com.atbug.rewrite:spring-rest-to-mcp:1.0-SNAPSHOT \
      -Drewrite.exportDatatables=true
    ```
 
