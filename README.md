@@ -210,7 +210,7 @@ You can try out this conversion tool with a sample Spring Boot 3 REST API projec
    - Access the inspector in your browser at: http://localhost:5173/
    - In the left side panel, configure your MCP server with:
      - Type: SSE
-     - Address: http://localhost:8080/mcp/messages
+     - Address: http://localhost:8080/sse
    - Once connected, you can:
      - View all available tools in the main panel
      - Test each tool interactively
@@ -233,7 +233,7 @@ Applications consuming your MCP server can be configured to connect to it with c
       "autoApprove": [],
       "disabled": false,
       "timeout": 60,
-      "url": "http://localhost:8080/mcp/messages",
+      "url": "http://localhost:8080/sse",
       "transportType": "sse"
     }
   }
