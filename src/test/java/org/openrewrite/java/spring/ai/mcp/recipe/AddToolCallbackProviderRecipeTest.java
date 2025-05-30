@@ -1,4 +1,4 @@
-package org.openrewrite.java.spring.ai.mcp.recipe.mcp;
+package org.openrewrite.java.spring.ai.mcp.recipe;
 
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Assertions;
@@ -8,16 +8,16 @@ import org.openrewrite.test.RewriteTest;
 
 import static org.openrewrite.java.Assertions.java;
 
-class AddToolCallbackProviderBeanTest implements RewriteTest {
+class AddToolCallbackProviderRecipeTest implements RewriteTest {
     @Override
     public void defaults(RecipeSpec spec) {
-        spec.recipes(new AddToolCallbackProviderBean());
+        spec.recipes(new AddToolCallbackProviderRecipe());
     }
 
     @Test
     public void addToolCallbackProviderBeanSuccess() {
         rewriteRun(
-                java(AddToolAnnotationToMappingMethodTest.expectedHelloTool),
+                java(AddToolAnnotationToMappingMethodRecipeTest.expectedHelloTool),
                 java(entryClassWithoutTargetBeanMethod, entryClassWithTargetBeanMethod)
         );
     }
@@ -25,8 +25,8 @@ class AddToolCallbackProviderBeanTest implements RewriteTest {
     @Test
     public void successUpdateBeanDefinition() {
         rewriteRun(
-                java(AddToolAnnotationToMappingMethodTest.expectedHelloTool),
-                java(AddToolAnnotationToMappingMethodTest.expectedUserTool),
+                java(AddToolAnnotationToMappingMethodRecipeTest.expectedHelloTool),
+                java(AddToolAnnotationToMappingMethodRecipeTest.expectedUserTool),
                 java(entryClassWithTargetBeanMethod, entryClassWithBeanMethodUpdated)
         );
     }
@@ -34,7 +34,7 @@ class AddToolCallbackProviderBeanTest implements RewriteTest {
     @Test
     public void failDueToBadSituation() {
         Assertions.assertThrows(AssertionError.class, () -> rewriteRun(
-                java(AddToolAnnotationToMappingMethodTest.expectedHelloTool),
+                java(AddToolAnnotationToMappingMethodRecipeTest.expectedHelloTool),
                 java(entryClassWithDuplicatedTargetBeanMethod, entryClassWithDuplicatedTargetBeanMethodWithFailMessage)
         ), "There should be at most one method with return type ToolCallbackProvider");
     }
@@ -155,7 +155,7 @@ class AddToolCallbackProviderBeanTest implements RewriteTest {
             import org.springframework.boot.autoconfigure.SpringBootApplication;
             import org.springframework.context.annotation.Bean;
             
-            /*~~(There should be at most one method with return type ToolCallbackProvider)~~>*/@SpringBootApplication
+            @SpringBootApplication
             public class SpringMainApp {
             
                 public static void main(String[] args) {

@@ -37,8 +37,8 @@ The recipe adds Spring AI MCP dependencies (version 1.0.0-SNAPSHOT or newer) to 
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/web-to-mcp.git
-   cd web-to-mcp
+   git clone https://github.com/v5tech/rewrite-spring-rest-to-mcp.git
+   cd rewrite-spring-rest-to-mcp
    ```
 
 2. Build the project:
@@ -53,9 +53,9 @@ This will compile the code and install the artifact to your local Maven reposito
 To apply the recipes to your Spring Web project, run the following Maven command:
 
 ```bash
-mvn org.openrewrite.maven:rewrite-maven-plugin:6.4.0:run \
-  -Drewrite.activeRecipes=RewriteWebToMCP \
-  -Drewrite.recipeArtifactCoordinates=com.atbug.rewrite:web-to-mcp:1.0-SNAPSHOT \
+mvn org.openrewrite.maven:rewrite-maven-plugin:6.8.1:run \
+  -Drewrite.activeRecipes=MigrateToSpringAIMcpServerRecipe \
+  -Drewrite.recipeArtifactCoordinates=org.openrewrite.java.spring.ai.mcp:rewrite-spring-rest-to-mcp:1.0-SNAPSHOT \
   -Drewrite.exportDatatables=true
 ```
 
@@ -73,17 +73,17 @@ The recipe performs several transformations that are organized into three main c
 - Adds Spring AI MCP server WebMVC dependency (`spring-ai-starter-mcp-server-webmvc`)
 
 ### 2. Code Transformations
-- **`AddToolAnnotationToMappingMethod`**: Automatically converts Spring Web controller methods to MCP tools
+- **`AddToolAnnotationToMappingMethodRecipe`**: Automatically converts Spring Web controller methods to MCP tools
   - Adds `@Tool` annotations to methods with Spring Web mapping annotations (`@GetMapping`, `@PostMapping`, etc.)
   - Extracts method descriptions from JavaDoc comments to populate the `description` attribute
   - Adds `@ToolParam` annotations to method parameters, preserving their descriptions from JavaDoc
   
-- **`AddToolCallbackProviderBean`**: Creates or updates a bean to register MCP tools
+- **`AddToolCallbackProviderRecipe`**: Creates or updates a bean to register MCP tools
   - Identifies Spring Boot application entry point class
   - Creates a `ToolCallbackProvider` bean to register all controllers with `@Tool` annotations
   - Intelligently updates existing provider beans if they already exist
   
-- **`AddSpringAIMcpProperties`**: Configures MCP server properties 
+- **`AddMcpServerConfigRecipe`**: Configures MCP server properties 
   - Adds required MCP server configuration to `application.properties` or `application.yml`
   - Sets server name, version, type, and message endpoints
   - Supports both YAML and Properties file formats
@@ -172,17 +172,17 @@ You can try out this conversion tool with a sample Spring Boot 3 REST API projec
 
 1. First, run the Maven command to update the POM file with required dependencies:
    ```bash
-   mvn org.openrewrite.maven:rewrite-maven-plugin:6.4.0:run \
-     -Drewrite.activeRecipes=RewriteWebToMCP \
-     -Drewrite.recipeArtifactCoordinates=com.atbug.rewrite:spring-rest-to-mcp:1.0-SNAPSHOT \
+   mvn org.openrewrite.maven:rewrite-maven-plugin:6.8.1:run \
+     -Drewrite.activeRecipes=MigrateToSpringAIMcpServerRecipe \
+     -Drewrite.recipeArtifactCoordinates=org.openrewrite.java.spring.ai.mcp:rewrite-spring-rest-to-mcp:1.0-SNAPSHOT \
      -Drewrite.exportDatatables=true
    ```
 
 2. Then, run the same command again to perform the actual code conversion:
    ```bash
-   mvn org.openrewrite.maven:rewrite-maven-plugin:6.4.0:run \
-     -Drewrite.activeRecipes=RewriteWebToMCP \
-     -Drewrite.recipeArtifactCoordinates=com.atbug.rewrite:spring-rest-to-mcp:1.0-SNAPSHOT \
+   mvn org.openrewrite.maven:rewrite-maven-plugin:6.8.1:run \
+     -Drewrite.activeRecipes=MigrateToSpringAIMcpServerRecipe \
+     -Drewrite.recipeArtifactCoordinates=org.openrewrite.java.spring.ai.mcp:rewrite-spring-rest-to-mcp:1.0-SNAPSHOT \
      -Drewrite.exportDatatables=true
    ```
 
@@ -207,7 +207,7 @@ You can try out this conversion tool with a sample Spring Boot 3 REST API projec
      npm install
      npm run dev
      ```
-   - Access the inspector in your browser at: http://localhost:5173/
+   - Access the inspector in your browser at: http://localhost:6274/
    - In the left side panel, configure your MCP server with:
      - Type: SSE
      - Address: http://localhost:8080/sse

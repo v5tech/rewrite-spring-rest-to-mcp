@@ -1,4 +1,4 @@
-package org.openrewrite.java.spring.ai.mcp.recipe.config;
+package org.openrewrite.java.spring.ai.mcp.recipe;
 
 import org.junit.jupiter.api.Test;
 import org.openrewrite.InMemoryExecutionContext;
@@ -7,17 +7,17 @@ import org.openrewrite.maven.MavenSettings;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-import static org.openrewrite.java.spring.ai.mcp.recipe.mcp.AddToolAnnotationToMappingMethodTest.pom;
+import static org.openrewrite.java.spring.ai.mcp.recipe.AddToolAnnotationToMappingMethodRecipeTest.pom;
 import static org.openrewrite.maven.Assertions.pomXml;
 import static org.openrewrite.properties.Assertions.properties;
 import static org.openrewrite.yaml.Assertions.yaml;
 
-class AddSpringAIMcpPropertiesTest implements RewriteTest {
+class AddMcpServerConfigRecipeTest implements RewriteTest {
     @Override
     public void defaults(RecipeSpec spec) {
         InMemoryExecutionContext ctx = new InMemoryExecutionContext();
         MavenExecutionContextView context = MavenExecutionContextView.view(ctx).setMavenSettings(MavenSettings.readMavenSettingsFromDisk(ctx));
-        spec.recipe(new AddSpringAIMcpProperties(null))
+        spec.recipe(new AddMcpServerConfigRecipe(null))
                 .executionContext(context);
     }
 

@@ -1,4 +1,4 @@
-package org.openrewrite.java.spring.ai.mcp.recipe.mcp;
+package org.openrewrite.java.spring.ai.mcp.recipe;
 
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
@@ -12,10 +12,10 @@ import org.openrewrite.test.RewriteTest;
 import static org.openrewrite.java.Assertions.java;
 import static org.openrewrite.maven.Assertions.pomXml;
 
-public class AddToolAnnotationToMappingMethodTest implements RewriteTest {
+public class AddToolAnnotationToMappingMethodRecipeTest implements RewriteTest {
     @Override
     public void defaults(RecipeSpec spec) {
-        spec.recipe(new AddToolAnnotationToMappingMethod());
+        spec.recipe(new AddToolAnnotationToMappingMethodRecipe());
     }
 
     @Test

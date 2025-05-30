@@ -1,0 +1,93 @@
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: InsertSpringAiRepositoriesInGradleGroovyDSL
+description: Add Spring AI repositories to Gradle Groovy DSL files (.gradle)
+recipeList:
+  - org.openrewrite.text.FindAndReplace:
+      find: "repositories {"
+      replace: |
+        repositories {
+            maven {
+                name = "Spring Snapshots"
+                url = uri("https://repo.spring.io/snapshot")
+                mavenContent {
+                    snapshotsOnly()
+                }
+            }
+            maven {
+                name = "Central Portal Snapshots"
+                url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+                mavenContent {
+                    snapshotsOnly()
+                }
+            }
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: InsertSpringAiRepositoriesInGradleKotlinDSL
+description: Add Spring AI repositories to Gradle Kotlin DSL files (.gradle.kts)
+recipeList:
+  - org.openrewrite.text.FindAndReplace:
+      find: "repositories {"
+      replace: |
+        repositories {
+            maven {
+                name = "Spring Snapshots"
+                url = uri("https://repo.spring.io/snapshot")
+                content {
+                    includeGroupByRegex(".*")
+                    onlyForSnapshots()
+                }
+            }
+            maven {
+                name = "Central Portal Snapshots"
+                url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+                content {
+                    includeGroupByRegex(".*")
+                    onlyForSnapshots()
+                }
+            }
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: InsertSpringAiRepositoriesInGradleUnified
+description: Unified injection of Spring AI repositories into Gradle Groovy and Kotlin DSL files
+recipeList:
+  - InsertSpringAiRepositoriesInGradleGroovyDSL
+  - InsertSpringAiRepositoriesInGradleKotlinDSL
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: UpdateBuildFiles
+description: Add Spring AI dependencies and repositories for Maven, Gradle Groovy, and Gradle Kotlin DSL
+causesAnotherCycle: true
+recipeList:
+  - org.openrewrite.maven.AddRepository:
+      id: spring-snapshots
+      repoName: 'Spring Snapshots'
+      url: https://repo.spring.io/snapshot
+      releasesEnabled: false
+
+  - org.openrewrite.maven.AddRepository:
+      id: central-portal-snapshots
+      repoName: 'Central Portal Snapshots'
+      url: https://central.sonatype.com/repository/maven-snapshots/
+      releasesEnabled: false
+      snapshotsEnabled: true
+
+  - InsertSpringAiRepositoriesInGradleUnified
+
+  - org.openrewrite.java.dependencies.AddDependency:
+      groupId: org.springframework.ai
+      artifactId: spring-ai-starter-mcp-server-webmvc
+      version: 1.0.0-SNAPSHOT
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: MigrateToSpringAIMcpServerRecipe
+description: Rewrite REST API to Spring AI MCP Server and add related configurations
+recipeList:
+  - UpdateBuildFiles
+  - org.openrewrite.java.spring.ai.mcp.recipe.AddToolAnnotationToMappingMethodRecipe
+  - org.openrewrite.java.spring.ai.mcp.recipe.AddToolCallbackProviderRecipe
+  - org.openrewrite.java.spring.ai.mcp.recipe.AddMcpServerConfigRecipe

@@ -1,4 +1,4 @@
-package org.openrewrite.java.spring.ai.mcp.recipe.config;
+package org.openrewrite.java.spring.ai.mcp.recipe;
 
 import org.openrewrite.java.spring.ai.mcp.visitor.SpringAIMcpVisitor;
 import lombok.EqualsAndHashCode;
@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
-public class AddSpringAIMcpProperties extends ScanningRecipe<AtomicBoolean> {
+public class AddMcpServerConfigRecipe extends ScanningRecipe<AtomicBoolean> {
     List<String> SpringDefaultConfigurationPaths = Arrays.asList("**/application.yml", "**/application.properties", "**/application.yaml");
 
     @Option(displayName = "MCP server name",

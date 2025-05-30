@@ -1,4 +1,4 @@
-package org.openrewrite.java.spring.ai.mcp.recipe.mcp;
+package org.openrewrite.java.spring.ai.mcp.recipe;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class AddToolCallbackProviderBean extends ScanningRecipe<Set<String>> {
+public class AddToolCallbackProviderRecipe extends ScanningRecipe<Set<String>> {
     private static final String SPRING_BOOT_APPLICATION_FQN = "org.springframework.boot.autoconfigure.SpringBootApplication";
     private static final String SPRING_BEAN_FQN = "org.springframework.context.annotation.Bean";
     private static final String METHOD_TOOL_CB_PROVIDER_FQN = "org.springframework.ai.tool.method.MethodToolCallbackProvider";
@@ -157,11 +157,12 @@ public class AddToolCallbackProviderBean extends ScanningRecipe<Set<String>> {
                     public static class Builder {
                         private List<Object> toolObjects;
                         private Builder() {}
-                    public Builder toolObjects(Object... toolObjects) {
-                        return this;
-                    }
-                    public MethodToolCallbackProvider build() {
-                        return null;
+                        public Builder toolObjects(Object... toolObjects) {
+                            return this;
+                        }
+                        public MethodToolCallbackProvider build() {
+                            return null;
+                        }
                     }
                 }
                 """, METHOD_TOOL_CB_PROVIDER_FQN.substring(0, METHOD_TOOL_CB_PROVIDER_FQN.lastIndexOf('.')), METHOD_TOOL_CB_PROVIDER_FQN.substring(METHOD_TOOL_CB_PROVIDER_FQN.lastIndexOf('.') + 1));

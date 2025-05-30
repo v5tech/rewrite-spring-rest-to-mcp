@@ -1,4 +1,4 @@
-package org.openrewrite.java.spring.ai.mcp.recipe.mcp;
+package org.openrewrite.java.spring.ai.mcp.recipe;
 
 import org.jetbrains.annotations.NotNull;
 import org.openrewrite.*;
@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-public class AddToolAnnotationToMappingMethod extends ScanningRecipe<AtomicBoolean> {
+public class AddToolAnnotationToMappingMethodRecipe extends ScanningRecipe<AtomicBoolean> {
     private static final String MCP_TOOL_PACKAGE = "org.springframework.ai.tool.annotation";
     private static final String MCP_TOOL_SIMPLE_NAME = "Tool";
     private static final String MCP_TOOL_PARAM_SIMPLE_NAME = "ToolParam";
